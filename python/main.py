@@ -82,6 +82,11 @@ if __name__ == '__main__':
   m = Model()
   m.initialise()
 
+  # MCMC run length
+  steps = 1000000
+  skip = 100
+  keep = np.empty(steps//skip)
+
   plt.ion()
   plt.hold(False)
   for i in xrange(0, 100000):
@@ -91,6 +96,7 @@ if __name__ == '__main__':
       m = mm
 
     if i%100 == 0:
+      keep[i//skip] = m.logx[50]
       plt.plot(m.logx, Model.logl, 'bo')
       plt.xlim([-80., 0.])
       plt.draw()
