@@ -30,6 +30,7 @@ class Model:
     """
     Keep a copy of the data in the Model class
     """
+    # logl gets sorted at this point
     Model.run_id, Model.logl = run_id, np.sort(logl)
 
   def initialise(S):
