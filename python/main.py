@@ -41,11 +41,16 @@ class Model:
     draw from the prior.
     """
     S.u = rng.rand(Model.logl.size)
+    S.lam = rng.rand()
 
     S.logx = np.empty(Model.logl.size)
     for i in xrange(0, Model.run_id.max() + 1):
       which = (Model.run_id==i)
-      S.logx[which] = np.cumsum(np.log(S.u[which]))
+      if i==0:
+        factor = 1.
+      else:
+        factor = S.lam
+      S.logx[which] = np.cumsum(factor*np.log(S.u[which]))
     S.order = np.argsort(S.logx)
     S.logx = np.sort(S.logx)[::-1]
 
@@ -53,14 +58,22 @@ class Model:
     """
     Do a Metropolis proposal
     """
-    index = rng.randint(S.u.size)
-    S.u[index] += 10.**(1.5 - 6.*rng.rand())*rng.randn()
-    S.u[index] = np.mod(S.u[index], 1.)
+    if rng.rand() <= 0.5:
+      index = rng.randint(S.u.size)
+      S.u[index] += 10.**(1.5 - 6.*rng.rand())*rng.randn()
+      S.u[index] = np.mod(S.u[index], 1.)
+    else:
+      S.lam += 10.**(1.5 - 6.*rng.rand())*rng.randn()
+      S.lam += np.mod(S.lam, 1.)
 
     S.logx = np.empty(Model.logl.size)
     for i in xrange(0, Model.run_id.max() + 1):
       which = (Model.run_id==i)
-      S.logx[which] = np.cumsum(np.log(S.u[which]))
+      if i==0:
+        factor = 1.
+      else:
+        factor = S.lam
+      S.logx[which] = np.cumsum(factor*np.log(S.u[which]))
     S.order = np.argsort(S.logx)
     S.logx = np.sort(S.logx)[::-1]
 
@@ -96,9 +109,10 @@ if __name__ == '__main__':
       m = mm
 
     if i%100 == 0:
-      keep[i//skip] = m.logx[50]
-      plt.plot(m.logx, Model.logl, 'bo')
-      plt.xlim([-80., 0.])
+      keep[i//skip] = m.lam
+      plt.plot(keep[0:(i//skip + 1)])
+#      plt.plot(m.logx, Model.logl, 'bo')
+#      plt.xlim([-80., 0.])
       plt.draw()
 
   plt.ioff()
