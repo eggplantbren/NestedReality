@@ -18,11 +18,30 @@ def simulate_data():
   return [run_id, logx, logl]
 
 
+
+class Model:
+  """
+  An object of this class is a hypothesis about the
+  logx-values of all of the points. NB: I use 'S' instead of self
+  """
+  def __init__(S):
+    pass
+
+  @staticmethod
+  def set_data(run_id, logx):
+    """
+    Keep a copy of the data in the Model class
+    """
+    Model.run_id, Model.logx = run_id, logx
+
 if __name__ == '__main__':
   rng.seed(1)
   run_id, logx, logl = simulate_data()
+  Model.set_data(run_id, logx)
 
   plt.plot(logx[run_id==0], logl[run_id==0], 'bo-', alpha=0.2)
   plt.plot(logx[run_id==1], logl[run_id==1], 'ro-', alpha=0.2)
+  plt.xlabel(r'$\log X$')
+  plt.ylabel(r'$\log L$')
   plt.show()
 
