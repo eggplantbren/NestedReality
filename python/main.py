@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import numpy.random as rng
+import copy as cp
 
 def simulate_data():
   """
@@ -39,10 +40,28 @@ class Model:
     with the ordering of the data. Note this does not
     draw from the prior.
     """
+    S.u = rng.rand(Model.logl.size)
+
     S.logx = np.empty(Model.logl.size)
     for i in xrange(0, Model.run_id.max() + 1):
-      which = (Model.run_id == i)
-      S.logx[which] = np.cumsum(np.log(rng.rand(which.sum())))
+      which = (Model.run_id==i)
+      S.logx[which] = np.cumsum(np.log(S.u[which]))
+    S.order = np.argsort(S.logx)
+    S.logx = np.sort(S.logx)[::-1]
+
+  def proposal(S):
+    """
+    Do a Metropolis proposal
+    """
+    index = rng.randint(S.u.size)
+    S.u[index] += 10.**(1.5 - 6.*rng.rand())*rng.randn()
+    S.u[index] = np.mod(S.u[index], 1.)
+
+    S.logx = np.empty(Model.logl.size)
+    for i in xrange(0, Model.run_id.max() + 1):
+      which = (Model.run_id==i)
+      S.logx[which] = np.cumsum(np.log(S.u[which]))
+    S.order = np.argsort(S.logx)
     S.logx = np.sort(S.logx)[::-1]
 
 if __name__ == '__main__':
@@ -62,6 +81,21 @@ if __name__ == '__main__':
   # Now attempt to reconstruct it
   m = Model()
   m.initialise()
-  plt.plot(m.logx, Model.logl, 'bo')
+
+  plt.ion()
+  plt.hold(False)
+  for i in xrange(0, 10000):
+    mm = cp.deepcopy(m)
+    mm.proposal()
+    if np.all(mm.order == m.order):
+      m = mm
+      print('Accepted')
+    else:
+      print('Rejected')
+
+    plt.plot(m.logx, Model.logl, 'bo')
+    plt.draw()
+
+  plt.ioff()
   plt.show()
 
