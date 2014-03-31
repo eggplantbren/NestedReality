@@ -33,6 +33,7 @@ class Model:
     Keep a copy of the data in the Model class
     """
     Model.run_id, Model.logx = run_id, logx
+    Model.order = np.argsort(Model.logx)
 
 if __name__ == '__main__':
   rng.seed(1)
