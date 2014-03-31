@@ -84,17 +84,16 @@ if __name__ == '__main__':
 
   plt.ion()
   plt.hold(False)
-  for i in xrange(0, 10000):
+  for i in xrange(0, 100000):
     mm = cp.deepcopy(m)
     mm.proposal()
     if np.all(mm.order == m.order):
       m = mm
-      print('Accepted')
-    else:
-      print('Rejected')
 
-    plt.plot(m.logx, Model.logl, 'bo')
-    plt.draw()
+    if i%100 == 0:
+      plt.plot(m.logx, Model.logl, 'bo')
+      plt.xlim([-80., 0.])
+      plt.draw()
 
   plt.ioff()
   plt.show()
