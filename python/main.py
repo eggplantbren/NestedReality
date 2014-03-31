@@ -17,8 +17,6 @@ def simulate_data():
   logl = np.sqrt(-logx)
   return [run_id, logx, logl]
 
-
-
 class Model:
   """
   An object of this class is a hypothesis about the
@@ -32,8 +30,7 @@ class Model:
     """
     Keep a copy of the data in the Model class
     """
-    Model.run_id, Model.logl = run_id, logl
-    Model.order = np.argsort(Model.logl)
+    Model.run_id, Model.logl = run_id, np.sort(logl)
 
   def initialise(S):
     """
@@ -41,16 +38,29 @@ class Model:
     with the ordering of the data. Note this does not
     draw from the prior.
     """
-    pass
+    S.logx = np.empty(Model.logl.size)
+    for i in xrange(0, Model.run_id.max() + 1):
+      which = (Model.run_id == i)
+      S.logx[which] = np.cumsum(np.log(rng.rand(which.sum())))
+    S.logx = np.sort(S.logx)[::-1]
 
 if __name__ == '__main__':
+  # Generate some fake data
   rng.seed(1)
   run_id, logx, logl = simulate_data()
   Model.set_data(run_id, logl)
 
+  # Plot the truth
   plt.plot(logx[run_id==0], logl[run_id==0], 'bo-', alpha=0.2)
   plt.plot(logx[run_id==1], logl[run_id==1], 'ro-', alpha=0.2)
   plt.xlabel(r'$\log X$')
   plt.ylabel(r'$\log L$')
+  plt.title('Reality')
+  plt.show()
+
+  # Now attempt to reconstruct it
+  m = Model()
+  m.initialise()
+  plt.plot(m.logx, Model.logl, 'bo')
   plt.show()
 
