@@ -13,7 +13,7 @@ def simulate_data():
 
   logx = np.empty(100)
   logx[0:50] = np.cumsum(np.log(rng.rand(50)))
-  logx[50:] = np.cumsum(0.5*np.log(rng.rand(50)))
+  logx[50:] = 0.5*np.cumsum(np.log(rng.rand(50)))
 
   logl = np.sqrt(-logx)
   return [run_id, logx, logl]
@@ -41,7 +41,7 @@ class Model:
     draw from the prior.
     """
     S.u = rng.rand(Model.logl.size)
-    S.lam = rng.rand()
+    S.lam = 0.5
 
     S.logx = np.empty(Model.logl.size)
     for i in xrange(0, Model.run_id.max() + 1):
@@ -50,7 +50,7 @@ class Model:
         factor = 1.
       else:
         factor = S.lam
-      S.logx[which] = np.cumsum(factor*np.log(S.u[which]))
+      S.logx[which] = factor*np.cumsum(np.log(S.u[which]))
     S.order = np.argsort(S.logx)
     S.logx = np.sort(S.logx)[::-1]
 
@@ -64,7 +64,7 @@ class Model:
       S.u[index] = np.mod(S.u[index], 1.)
     else:
       S.lam += 10.**(1.5 - 6.*rng.rand())*rng.randn()
-      S.lam += np.mod(S.lam, 1.)
+      S.lam = np.mod(S.lam, 1.)
 
     S.logx = np.empty(Model.logl.size)
     for i in xrange(0, Model.run_id.max() + 1):
@@ -73,7 +73,7 @@ class Model:
         factor = 1.
       else:
         factor = S.lam
-      S.logx[which] = np.cumsum(factor*np.log(S.u[which]))
+      S.logx[which] = factor*np.cumsum(np.log(S.u[which]))
     S.order = np.argsort(S.logx)
     S.logx = np.sort(S.logx)[::-1]
 
@@ -96,23 +96,24 @@ if __name__ == '__main__':
   m.initialise()
 
   # MCMC run length
-  steps = 1000000
-  skip = 100
+  steps = 10000000
+  skip = 1000
   keep = np.empty(steps//skip)
 
   plt.ion()
   plt.hold(False)
-  for i in xrange(0, 100000):
+  for i in xrange(0, steps):
     mm = cp.deepcopy(m)
     mm.proposal()
     if np.all(mm.order == m.order):
       m = mm
 
-    if i%100 == 0:
+    if i%skip == 0:
       keep[i//skip] = m.lam
       plt.plot(keep[0:(i//skip + 1)])
 #      plt.plot(m.logx, Model.logl, 'bo')
 #      plt.xlim([-80., 0.])
+      print(keep[0:(i//skip + 1)].mean(), keep[0:(i//skip + 1)].std())
       plt.draw()
 
   plt.ioff()
