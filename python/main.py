@@ -32,7 +32,10 @@ class Model:
     Keep a copy of the data in the Model class
     """
     # logl gets sorted at this point
-    Model.run_id, Model.logl = run_id, np.sort(logl)
+    Model.run_id, Model.logl = run_id, logl
+    order = np.argsort(logl)
+    Model.run_id = Model.run_id[order]
+    Model.logl = Model.logl[order]
 
   def initialise(S):
     """
@@ -91,31 +94,31 @@ if __name__ == '__main__':
   plt.title('Reality')
   plt.show()
 
-  # Now attempt to reconstruct it
-  m = Model()
-  m.initialise()
+#  # Now attempt to reconstruct it
+#  m = Model()
+#  m.initialise()
 
-  # MCMC run length
-  steps = 10000000
-  skip = 1000
-  keep = np.empty(steps//skip)
+#  # MCMC run length
+#  steps = 10000000
+#  skip = 1000
+#  keep = np.empty(steps//skip)
 
-  plt.ion()
-  plt.hold(False)
-  for i in xrange(0, steps):
-    mm = cp.deepcopy(m)
-    mm.proposal()
-    if np.all(mm.order == m.order):
-      m = mm
+#  plt.ion()
+#  plt.hold(False)
+#  for i in xrange(0, steps):
+#    mm = cp.deepcopy(m)
+#    mm.proposal()
+#    if np.all(mm.order == m.order):
+#      m = mm
 
-    if i%skip == 0:
-      keep[i//skip] = m.lam
-      plt.plot(keep[0:(i//skip + 1)])
-#      plt.plot(m.logx, Model.logl, 'bo')
-#      plt.xlim([-80., 0.])
-      print(keep[0:(i//skip + 1)].mean(), keep[0:(i//skip + 1)].std())
-      plt.draw()
+#    if i%skip == 0:
+#      keep[i//skip] = m.lam
+#      plt.plot(keep[0:(i//skip + 1)])
+##      plt.plot(m.logx, Model.logl, 'bo')
+##      plt.xlim([-80., 0.])
+#      print(keep[0:(i//skip + 1)].mean(), keep[0:(i//skip + 1)].std())
+#      plt.draw()
 
-  plt.ioff()
-  plt.show()
+#  plt.ioff()
+#  plt.show()
 
