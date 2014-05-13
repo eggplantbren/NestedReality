@@ -31,12 +31,16 @@ The $x$-values from runs 1 and 2 are:
 \{x_{21}, x_{22}, ..., x_{2n}\}
 \end{eqnarray}
 
-The prior for what happened in run 1 is:
+In a perfect Nested Sampling run, the prior for what happens in run 1 is:
 \begin{eqnarray}
 x_{11} \sim \textnormal{Uniform}(0, 1)\\
 x_{12} | x_{11} \sim \textnormal{Uniform}(0, x_{11})\\
 x_{13} | x_{11}, x_{12} \sim \textnormal{Uniform}(0, x_{12})
 \end{eqnarray}
+and similarly for run 2.
+
+For convenience later, let's transform these, but without the negative sign
+usually used. Define $u=-\log(x)$.
 
 \end{document}
 
