@@ -54,9 +54,18 @@ something else.
 
 \section{Simple Example}
 Let's assume run 1 is perfect, so the exponential prior applies. On the other
-hand, let's assume that the prior for run 2 is, conditional on some scale
-length $\alpha$, that each subsequent exponential after the first has scale
+hand, let's assume that the prior for run 2 is, conditional on some parameter
+$\alpha$, that each subsequent exponential after the first has scale
 length $\alpha$, which we would like to infer.
+
+What's the data? When the $x$-values (or equivalently, the likelihoods) are
+sorted, we will get an {\it ordering} which looks like this:
+\begin{eqnarray}
+\mathcal{D} = \{1, 2, 1, ..., 1\}
+\end{eqnarray}
+The first element tells us that the particle with the lowest likelihood was
+in run 1. The second element tells us that the particle with the second lowest
+likelihood was in run 2.
 
 \end{document}
 
