@@ -25,8 +25,18 @@
 \abstract{This is the abstract}
 
 \section{Introduction}
-Blah blah
+The $x$-values from runs 1 and 2 are:
+\begin{eqnarray}
+\{x_{11}, x_{12}, ..., x_{1n}\}\\
+\{x_{21}, x_{22}, ..., x_{2n}\}
+\end{eqnarray}
 
+The prior for what happened in run 1 is:
+\begin{eqnarray}
+x_{11} \sim \textnormal{Uniform}(0, 1)\\
+x_{12} | x_{11} \sim \textnormal{Uniform}(0, x_{11})\\
+x_{13} | x_{11}, x_{12} \sim \textnormal{Uniform}(0, x_{12})
+\end{eqnarray}
 
 \end{document}
 
