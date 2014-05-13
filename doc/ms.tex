@@ -37,10 +37,19 @@ x_{11} \sim \textnormal{Uniform}(0, 1)\\
 x_{12} | x_{11} \sim \textnormal{Uniform}(0, x_{11})\\
 x_{13} | x_{11}, x_{12} \sim \textnormal{Uniform}(0, x_{12})
 \end{eqnarray}
-and similarly for run 2.
+and so on, and similarly for run 2.
 
 For convenience later, let's transform these, but without the negative sign
-usually used. Define $u=-\log(x)$.
+usually used. Define $u=-\log(x)$. Then the prior for a perfect NS run would be
+\begin{eqnarray}
+u_{11} \sim \textnormal{Exponential}(0, 1)\\
+u_{12} | u_{11} \sim \textnormal{Exponential}(u_{11}, 1)\\
+u_{13} | u_{11}, u_{12} \sim \textnormal{Exponential}(u_{12}, 1)
+\end{eqnarray}
+where I'm using Exponential$(a, b)$ to mean a shifted exponential starting
+at $a$ and with a scale length $b$.
+
+
 
 \end{document}
 
