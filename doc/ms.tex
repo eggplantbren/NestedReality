@@ -49,7 +49,14 @@ u_{13} | u_{11}, u_{12} \sim \textnormal{Exponential}(u_{12}, 1)
 where I'm using Exponential$(a, b)$ to mean a shifted exponential starting
 at $a$ and with a scale length $b$.
 
+However, due to imperfect MCMC, these priors will have to be changed to
+something else.
 
+\section{Simple Example}
+Let's assume run 1 is perfect, so the exponential prior applies. On the other
+hand, let's assume that the prior for run 2 is, conditional on some scale
+length $\alpha$, that each subsequent exponential after the first has scale
+length $\alpha$, which we would like to infer.
 
 \end{document}
 
