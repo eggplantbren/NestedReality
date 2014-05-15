@@ -61,11 +61,18 @@ length $\alpha$, which we would like to infer.
 What's the data? When the $x$-values (or equivalently, the likelihoods) are
 sorted, we will get an {\it ordering} which looks like this:
 \begin{eqnarray}
-\mathcal{D} = \{1, 2, 1, ..., 1\}
+\mathcal{D} = \{1, 2, 2, 1, 2, 1, 2, 2, 1, 1\}
 \end{eqnarray}
 The first element tells us that the particle with the lowest likelihood was
 in run 1. The second element tells us that the particle with the second lowest
-likelihood was in run 2.
+likelihood was in run 2. And so on.
+
+Let's calculate the likelihood for our dataset $\mathcal{D}$, given $\alpha$.
+Let's start with $P(\mathcal{D}_1 = 1 | \alpha)$, the probability that the
+worst point is in run 1. The worst point must be either
+$u_{11}$ or $u_{21}$, because Nested Sampling creates an increasing sequence
+of points. Since the priors for $u_{11}$ or $u_{21}$ are identical,
+$P(\mathcal{D}_1 = 1 | \alpha) = \frac{1}{2}$ by symmetry.
 
 \end{document}
 
