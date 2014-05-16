@@ -31,7 +31,8 @@ u = u[sortkey]
 ids = ids[sortkey]
 
 data = empty((N*n, 2))
-data[:,0] = u
+# Likelihood function - we don't get to see 'u'
+data[:,0] = sqrt(u)
 data[:,1] = ids
 print(data)
 savetxt('data.txt', data)

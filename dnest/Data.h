@@ -1,6 +1,6 @@
 #ifndef _Data_
 #define _Data_
-
+z
 class Data
 {
 	private:
