@@ -1,9 +1,13 @@
 #ifndef _Data_
 #define _Data_
-z
+
+#include <vector>
+
 class Data
 {
 	private:
+		std::vector<double> logl;
+		std::vector<int> ids;
 
 	public:
 		Data();
