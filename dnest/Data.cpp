@@ -30,7 +30,9 @@ void Data::load(const char* filename)
 		logl.push_back(temp1);
 		ids.push_back(static_cast<int>(temp2));
 	}
-
 	fin.close();
+
+	cout<<"# Found "<<logl.size()<<" data points in file "<<filename;
+	cout<<"."<<endl;
 }
 
