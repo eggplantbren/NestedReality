@@ -26,6 +26,7 @@
 class MyModel:public DNest3::Model
 {
 	private:
+		double alpha;
 
 	public:
 		MyModel();
