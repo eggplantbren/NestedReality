@@ -11,8 +11,8 @@ int main(int argc, char** argv)
 	Data::get_instance().load("data.txt");
 
 	// Run DNest
-	// MTSampler<MyModel> sampler = setup_mt<MyModel>(argc, argv);
-	// sampler.run();
+	MTSampler<MyModel> sampler = setup_mt<MyModel>(argc, argv);
+	sampler.run();
 
 	return 0;
 }
