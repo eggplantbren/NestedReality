@@ -13,6 +13,9 @@ class Data
 		Data();
 		void load(const char* filename);
 
+		const std::vector<double>& get_logl() const { return logl; }
+		const std::vector<int>& get_ids() const { return ids; }
+
 	// Singleton
 	private:
 		static Data instance;
