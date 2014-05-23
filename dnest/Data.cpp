@@ -21,18 +21,21 @@ void Data::load(const char* filename)
 	}
 
 	// Empty the vectors
-	logl.resize(0); ids.resize(0);
+	logl.resize(0);
 
 	// Read data from file
-	double temp1, temp2;
-	while(fin>>temp1 && fin>>temp2)
+	int temp1;
+	double temp2;
+	int i=0;
+	while(fin>>temp1)
 	{
-		logl.push_back(temp1);
-		ids.push_back(static_cast<int>(temp2));
+		for(int j=0; j<temp1; j++)
+		{
+			fin>>temp2;
+			logl[i].push_back(temp2);
+		}
+		i++;
 	}
 	fin.close();
-
-	cout<<"# Found "<<logl.size()<<" data points in file "<<filename;
-	cout<<"."<<endl;
 }
 

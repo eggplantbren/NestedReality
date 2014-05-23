@@ -6,15 +6,14 @@
 class Data
 {
 	private:
-		std::vector<double> logl;
-		std::vector<int> ids;
+		std::vector< std::vector<double> > logl;
 
 	public:
 		Data();
 		void load(const char* filename);
 
-		const std::vector<double>& get_logl() const { return logl; }
-		const std::vector<int>& get_ids() const { return ids; }
+		const std::vector< std::vector<double> >& get_logl() const
+		{ return logl; }
 
 	// Singleton
 	private:
