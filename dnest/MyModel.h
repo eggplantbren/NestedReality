@@ -28,6 +28,8 @@ class MyModel:public DNest3::Model
 	private:
 		double alpha;
 
+		std::vector< std::vector<double> > logx;
+
 	public:
 		MyModel();
 
