@@ -24,17 +24,25 @@ for i in xrange(0, N):
     u[:, i] = cumsum(u[:,i])
     ids[:,i] = 1
 
-u = u.flatten()
-ids = ids.flatten()
-sortkey = argsort(u)
-u = u[sortkey]
-ids = ids[sortkey]
 
-data = empty((N*n, 2))
-# Likelihood function - we don't get to see 'u'
-data[:,0] = sqrt(u)
-data[:,1] = ids
-print(data)
+# NEW DATA FORMAT. EACH RUN GOES ON ONE ROW
+data = empty((N, n+1))
+data[:,0] = n
+data[:,1:] = u.T
 savetxt('data.txt', data)
+
+### ALTERNATIVE DATA FORMAT
+#u = u.flatten()
+#ids = ids.flatten()
+#sortkey = argsort(u)
+#u = u[sortkey]
+#ids = ids[sortkey]
+
+#data = empty((N*n, 2))
+## Likelihood function - we don't get to see 'u'
+#data[:,0] = sqrt(u)
+#data[:,1] = ids
+#print(data)
+#savetxt('data.txt', data)
 
 
