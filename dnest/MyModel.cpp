@@ -102,7 +102,10 @@ double MyModel::logLikelihood() const
 
 void MyModel::print(std::ostream& out) const
 {
-	out<<alpha;
+	out<<alpha<<' ';
+	for(size_t i=0; i<logx.size(); i++)
+		for(size_t j=0; j<logx[i].size(); j++)
+			out<<logx[i][j]<<' ';
 }
 
 string MyModel::description() const
