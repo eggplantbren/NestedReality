@@ -1,12 +1,14 @@
 #include "MyModel.h"
 #include "RandomNumberGenerator.h"
 #include "Utils.h"
+#include "Data.h"
 #include <cmath>
 
 using namespace std;
 using namespace DNest3;
 
 MyModel::MyModel()
+:logx(Data::get_instance().get_logl())
 {
 
 }
