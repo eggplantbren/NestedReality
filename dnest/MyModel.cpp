@@ -73,8 +73,10 @@ double MyModel::perturb3()
 
 	logH -= logx[i][j];
 	logx[i][j] += randh();
-	logx[i][j] = mod(logx[i][j] - lower, upper - lower) + lower;
 	logH += logx[i][j];
+
+	if(logx[i][j] < lower || logx[i][j] > upper)
+		logH = -1E300;
 
 	return logH;
 }
