@@ -53,7 +53,7 @@ double MyModel::perturb2()
 	ratio *= alpha;
 
 	for(size_t j=1; j<logx[1].size(); j++)
-		logx[1][j] = logx[0][j] + (logx[1][j] - logx[0][j])*ratio;
+		logx[1][j] = logx[1][0] + (logx[1][j] - logx[1][0])*ratio;
 
 	return 0.;
 }
@@ -67,7 +67,7 @@ double MyModel::perturb3()
 	int i = randInt(logx.size());
 	int j = randInt(logx[i].size());
 
-	double lower = (j == static_cast<int>(logx[i].size()))?
+	double lower = (j == (static_cast<int>(logx[i].size()) - 1))?
 				(-1E300):(logx[i][j+1]);
 	double upper = (j == 0)?(0.):(logx[i][j-1]);
 
