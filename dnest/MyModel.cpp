@@ -15,7 +15,7 @@ MyModel::MyModel()
 
 void MyModel::fromPrior()
 {
-	alpha = randomU();
+	alpha = 0.1 + randomU();
 
 	double a;
 	for(size_t i=0; i<logx.size(); i++)
@@ -34,8 +34,8 @@ double MyModel::perturb1()
 	for(size_t j=1; j<logx[1].size(); j++)
 		logH -= (logx[1][j] - logx[1][j-1])/alpha - log(alpha);
 
-	alpha += randh();
-	alpha = mod(alpha, 1.);
+	alpha += 0.9*randh();
+	alpha = mod(alpha - 0.1, 0.9) + 0.1;
 
 	for(size_t j=1; j<logx[1].size(); j++)
 		logH += (logx[1][j] - logx[1][j-1])/alpha - log(alpha);
@@ -48,8 +48,8 @@ double MyModel::perturb2()
 {
 	// Change alpha, change logx values as well
 	double ratio = 1./alpha;
-	alpha += randh();
-	alpha = mod(alpha, 1.);
+	alpha += 0.9*randh();
+	alpha = mod(alpha - 0.1, 0.9) + 0.1;
 	ratio *= alpha;
 
 	for(size_t j=1; j<logx[1].size(); j++)
@@ -72,12 +72,22 @@ double MyModel::perturb3()
 	double upper = (j == 0)?(0.):(logx[i][j-1]);
 
 	double a = (i == 0)?(1.):(alpha);
-	logH -= logx[i][j]/a;
+
+	logH -= logx[i][0];
+	for(size_t jj=1; jj<logx[i].size(); jj++)
+		logH -= (logx[i][jj] - logx[i][jj-1])/a;
+
 	logx[i][j] += randh();
-	logH += logx[i][j]/a;
+
+	logH += logx[i][0];
+	for(size_t jj=1; jj<logx[i].size(); jj++)
+		logH += (logx[i][jj] - logx[i][jj-1])/a;
 
 	if(logx[i][j] < lower || logx[i][j] > upper)
+	{
 		logH = -1E300;
+		return logH;
+	}
 
 	return logH;
 }
@@ -85,6 +95,12 @@ double MyModel::perturb3()
 double MyModel::perturb()
 {
 	double logH = 0.;
+
+	if(randomU() <= 0.05)
+	{
+		fromPrior();
+		return 0.;
+	}
 
 	int which = randInt(3);
 
