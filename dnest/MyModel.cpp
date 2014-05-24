@@ -27,12 +27,29 @@ void MyModel::fromPrior()
 	}
 }
 
-double MyModel::perturb()
+double MyModel::perturb1()
 {
+	// Change alpha, leave logx values intact
+	double logH = 0.;
+	for(size_t j=1; j<logx[1].size(); j++)
+		logH -= (logx[1][j] - logx[1][j-1])/alpha - log(alpha);
+
 	alpha += randh();
 	alpha = mod(alpha, 1.);
 
-	return 0.;
+	for(size_t j=1; j<logx[1].size(); j++)
+		logH += (logx[1][j] - logx[1][j-1])/alpha - log(alpha);
+
+	return logH;
+}
+
+double MyModel::perturb()
+{
+	double logH = 0.;
+
+	logH += perturb1();
+
+	return logH;
 }
 
 double MyModel::logLikelihood() const

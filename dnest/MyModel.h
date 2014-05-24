@@ -30,6 +30,11 @@ class MyModel:public DNest3::Model
 
 		std::vector< std::vector<double> > logx;
 
+		// Different kinds of proposal
+		double perturb1();
+		double perturb2();
+		double perturb3();
+
 	public:
 		MyModel();
 
