@@ -43,11 +43,54 @@ double MyModel::perturb1()
 	return logH;
 }
 
+
+double MyModel::perturb2()
+{
+	// Change alpha, change logx values as well
+	double ratio = 1./alpha;
+	alpha += randh();
+	alpha = mod(alpha, 1.);
+	ratio *= alpha;
+
+	for(size_t j=1; j<logx[1].size(); j++)
+		logx[1][j] = logx[0][j] + (logx[1][j] - logx[0][j])*ratio;
+
+	return 0.;
+}
+
+
+double MyModel::perturb3()
+{
+	double logH = 0.;
+
+	// Change logx values, leave alpha intact
+	int i = randInt(logx.size());
+	int j = randInt(logx[i].size());
+
+	double lower = (j == static_cast<int>(logx[i].size()))?
+				(-1E300):(logx[i][j+1]);
+	double upper = (j == 0)?(0.):(logx[i][j-1]);
+
+	logH -= logx[i][j];
+	logx[i][j] += randh();
+	logx[i][j] = mod(logx[i][j] - lower, upper - lower) + lower;
+	logH += logx[i][j];
+
+	return logH;
+}
+
 double MyModel::perturb()
 {
 	double logH = 0.;
 
-	logH += perturb1();
+	int which = randInt(3);
+
+	if(which == 0)
+		logH += perturb1();
+	else if(which == 1)
+		logH += perturb2();
+	else
+		logH += perturb3();
 
 	return logH;
 }
