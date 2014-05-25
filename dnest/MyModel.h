@@ -28,7 +28,7 @@ class MyModel:public DNest3::Model
 	private:
 		double alpha;
 
-		std::vector< std::vector<double> > logx;
+		std::vector< std::vector<double> > s;
 
 		// Different kinds of proposal
 		double perturb1();

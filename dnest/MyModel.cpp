@@ -8,7 +8,7 @@ using namespace std;
 using namespace DNest3;
 
 MyModel::MyModel()
-:logx(Data::get_instance().get_logl())
+:s(Data::get_instance().get_logl())
 {
 
 }
@@ -18,27 +18,27 @@ void MyModel::fromPrior()
 	alpha = 0.1 + randomU();
 
 	double a;
-	for(size_t i=0; i<logx.size(); i++)
+	for(size_t i=0; i<s.size(); i++)
 	{
-		logx[i][0] = log(randomU());
+		s[i][0] = log(randomU());
 		a = (i == 0)?(1.):(alpha);
-		for(size_t j=1; j<logx[i].size(); j++)
-			logx[i][j] = logx[i][j-1] + a*log(randomU());
+		for(size_t j=1; j<s[i].size(); j++)
+			s[i][j] = s[i][j-1] + a*log(randomU());
 	}
 }
 
 double MyModel::perturb1()
 {
-	// Change alpha, leave logx values intact
+	// Change alpha, leave s values intact
 	double logH = 0.;
-	for(size_t j=1; j<logx[1].size(); j++)
-		logH -= (logx[1][j] - logx[1][j-1])/alpha - log(alpha);
+	for(size_t j=1; j<s[1].size(); j++)
+		logH -= (s[1][j] - s[1][j-1])/alpha - log(alpha);
 
 	alpha += 0.9*randh();
 	alpha = mod(alpha - 0.1, 0.9) + 0.1;
 
-	for(size_t j=1; j<logx[1].size(); j++)
-		logH += (logx[1][j] - logx[1][j-1])/alpha - log(alpha);
+	for(size_t j=1; j<s[1].size(); j++)
+		logH += (s[1][j] - s[1][j-1])/alpha - log(alpha);
 
 	return logH;
 }
@@ -46,14 +46,14 @@ double MyModel::perturb1()
 
 double MyModel::perturb2()
 {
-	// Change alpha, change logx values as well
+	// Change alpha, change s values as well
 	double ratio = 1./alpha;
 	alpha += 0.9*randh();
 	alpha = mod(alpha - 0.1, 0.9) + 0.1;
 	ratio *= alpha;
 
-	for(size_t j=1; j<logx[1].size(); j++)
-		logx[1][j] = logx[1][0] + (logx[1][j] - logx[1][0])*ratio;
+	for(size_t j=1; j<s[1].size(); j++)
+		s[1][j] = s[1][0] + (s[1][j] - s[1][0])*ratio;
 
 	return 0.;
 }
@@ -63,27 +63,27 @@ double MyModel::perturb3()
 {
 	double logH = 0.;
 
-	// Change logx values, leave alpha intact
-	int i = randInt(logx.size());
-	int j = randInt(logx[i].size());
+	// Change s values, leave alpha intact
+	int i = randInt(s.size());
+	int j = randInt(s[i].size());
 
-	double lower = (j == (static_cast<int>(logx[i].size()) - 1))?
-				(-1E300):(logx[i][j+1]);
-	double upper = (j == 0)?(0.):(logx[i][j-1]);
+	double lower = (j == (static_cast<int>(s[i].size()) - 1))?
+				(-1E300):(s[i][j+1]);
+	double upper = (j == 0)?(0.):(s[i][j-1]);
 
 	double a = (i == 0)?(1.):(alpha);
 
-	logH -= logx[i][0];
-	for(size_t jj=1; jj<logx[i].size(); jj++)
-		logH -= (logx[i][jj] - logx[i][jj-1])/a;
+	logH -= s[i][0];
+	for(size_t jj=1; jj<s[i].size(); jj++)
+		logH -= (s[i][jj] - s[i][jj-1])/a;
 
-	logx[i][j] += randh();
+	s[i][j] += randh();
 
-	logH += logx[i][0];
-	for(size_t jj=1; jj<logx[i].size(); jj++)
-		logH += (logx[i][jj] - logx[i][jj-1])/a;
+	logH += s[i][0];
+	for(size_t jj=1; jj<s[i].size(); jj++)
+		logH += (s[i][jj] - s[i][jj-1])/a;
 
-	if(logx[i][j] < lower || logx[i][j] > upper)
+	if(s[i][j] < lower || s[i][j] > upper)
 	{
 		logH = -1E300;
 		return logH;
@@ -122,9 +122,9 @@ double MyModel::logLikelihood() const
 void MyModel::print(std::ostream& out) const
 {
 	out<<alpha<<' ';
-	for(size_t i=0; i<logx.size(); i++)
-		for(size_t j=0; j<logx[i].size(); j++)
-			out<<logx[i][j]<<' ';
+	for(size_t i=0; i<s.size(); i++)
+		for(size_t j=0; j<s[i].size(); j++)
+			out<<s[i][j]<<' ';
 }
 
 string MyModel::description() const
