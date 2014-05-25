@@ -30,6 +30,10 @@ class MyModel:public DNest3::Model
 
 		std::vector< std::vector<double> > s;
 
+		// Log of p(s | alpha)
+		double logp;
+		void calculate_logp();
+
 		// Different kinds of proposal
 		double perturb1();
 		double perturb2();
