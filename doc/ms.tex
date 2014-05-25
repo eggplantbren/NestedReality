@@ -40,11 +40,11 @@ x_{13} | x_{11}, x_{12} \sim \textnormal{Uniform}(0, x_{12})
 and so on, and similarly for run 2.
 
 For convenience later, let's transform these, but without the negative sign
-usually used. Define $u=-\log(x)$. Then the prior for a perfect NS run would be
+usually used. Define $s=-\log(x)$. Then the prior for a perfect NS run would be
 \begin{eqnarray}
-u_{11} \sim \textnormal{Exponential}(0, 1)\\
-u_{12} | u_{11} \sim \textnormal{Exponential}(u_{11}, 1)\\
-u_{13} | u_{11}, u_{12} \sim \textnormal{Exponential}(u_{12}, 1)
+s_{11} \sim \textnormal{Exponential}(0, 1)\\
+s_{12} | s_{11} \sim \textnormal{Exponential}(s_{11}, 1)\\
+s_{13} | s_{11}, s_{12} \sim \textnormal{Exponential}(s_{12}, 1)
 \end{eqnarray}
 where I'm using Exponential$(a, b)$ to mean a shifted exponential starting
 at $a$ and with a scale length $b$.
@@ -58,26 +58,26 @@ hand, let's assume that the prior for run 2 is, conditional on some parameter
 $\alpha$, that each subsequent exponential after the first has scale
 length $\alpha$, which we would like to infer.
 
-What's the data? When the $x$-values (or equivalently, the likelihoods) are
-sorted, we will get an {\it ordering} which looks like this:
-\begin{eqnarray}
-\mathcal{D} = \{1, 2, 2, 1, 2, 1, 2, 2, 1, 1\}
-\end{eqnarray}
-The first element tells us that the particle with the lowest likelihood was
-in run 1. The second element tells us that the particle with the second lowest
-likelihood was in run 2. And so on.
+%What's the data? When the $x$-values (or equivalently, the likelihoods) are
+%sorted, we will get an {\it ordering} which looks like this:
+%\begin{eqnarray}
+%\mathcal{D} = \{1, 2, 2, 1, 2, 1, 2, 2, 1, 1\}
+%\end{eqnarray}
+%The first element tells us that the particle with the lowest likelihood was
+%in run 1. The second element tells us that the particle with the second lowest
+%likelihood was in run 2. And so on.
 
-Let's calculate the likelihood for our dataset $\mathcal{D}$, given $\alpha$.
-Let's start with $P(\mathcal{D}_1 = 1 | \alpha)$, the probability that the
-worst point is in run 1. The worst point must be either
-$u_{11}$ or $u_{21}$, because Nested Sampling creates an increasing sequence
-of points. Since the priors for $u_{11}$ or $u_{21}$ are identical,
-$P(\mathcal{D}_1 = 1 | \alpha) = \frac{1}{2}$ by symmetry.
+%Let's calculate the likelihood for our dataset $\mathcal{D}$, given $\alpha$.
+%Let's start with $P(\mathcal{D}_1 = 1 | \alpha)$, the probability that the
+%worst point is in run 1. The worst point must be either
+%$u_{11}$ or $u_{21}$, because Nested Sampling creates an increasing sequence
+%of points. Since the priors for $u_{11}$ or $u_{21}$ are identical,
+%$P(\mathcal{D}_1 = 1 | \alpha) = \frac{1}{2}$ by symmetry.
 
-The next factor in the likelihood is
-$P(\mathcal{D}_2 = 2 | D_1 = 1, \alpha)$, the probability that the second
-lowest likelihood seen is from run $2$ given that the first was in run 1, and
-given $\alpha$.
+%The next factor in the likelihood is
+%$P(\mathcal{D}_2 = 2 | D_1 = 1, \alpha)$, the probability that the second
+%lowest likelihood seen is from run $2$ given that the first was in run 1, and
+%given $\alpha$.
 
 \end{document}
 
