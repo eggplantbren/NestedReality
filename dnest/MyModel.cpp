@@ -20,10 +20,10 @@ void MyModel::fromPrior()
 	double a;
 	for(size_t i=0; i<s.size(); i++)
 	{
-		s[i][0] = log(randomU());
+		s[i][0] = -log(randomU());
 		a = (i == 0)?(1.):(alpha);
 		for(size_t j=1; j<s[i].size(); j++)
-			s[i][j] = s[i][j-1] + a*log(randomU());
+			s[i][j] = s[i][j-1] - a*log(randomU());
 	}
 }
 
@@ -32,13 +32,13 @@ double MyModel::perturb1()
 	// Change alpha, leave s values intact
 	double logH = 0.;
 	for(size_t j=1; j<s[1].size(); j++)
-		logH -= (s[1][j] - s[1][j-1])/alpha - log(alpha);
+		logH -= -(s[1][j] - s[1][j-1])/alpha - log(alpha);
 
 	alpha += 0.9*randh();
 	alpha = mod(alpha - 0.1, 0.9) + 0.1;
 
 	for(size_t j=1; j<s[1].size(); j++)
-		logH += (s[1][j] - s[1][j-1])/alpha - log(alpha);
+		logH += -(s[1][j] - s[1][j-1])/alpha - log(alpha);
 
 	return logH;
 }
@@ -67,21 +67,21 @@ double MyModel::perturb3()
 	int i = randInt(s.size());
 	int j = randInt(s[i].size());
 
-	double lower = (j == (static_cast<int>(s[i].size()) - 1))?
-				(-1E300):(s[i][j+1]);
-	double upper = (j == 0)?(0.):(s[i][j-1]);
+	double lower = (j == 0)?(0.):(s[i][j-1]);
+	double upper = (j == (static_cast<int>(s[i].size()) - 1))?
+				(1E300):(s[i][j+1]);
 
 	double a = (i == 0)?(1.):(alpha);
 
-	logH -= s[i][0];
+	logH -= -s[i][0];
 	for(size_t jj=1; jj<s[i].size(); jj++)
-		logH -= (s[i][jj] - s[i][jj-1])/a;
+		logH -= -(s[i][jj] - s[i][jj-1])/a;
 
 	s[i][j] += randh();
 
-	logH += s[i][0];
+	logH += -s[i][0];
 	for(size_t jj=1; jj<s[i].size(); jj++)
-		logH += (s[i][jj] - s[i][jj-1])/a;
+		logH += -(s[i][jj] - s[i][jj-1])/a;
 
 	if(s[i][j] < lower || s[i][j] > upper)
 	{
