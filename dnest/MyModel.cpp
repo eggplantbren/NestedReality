@@ -125,6 +125,8 @@ double MyModel::perturb()
 
 double MyModel::logLikelihood() const
 {
+	const vector< vector<double> >& logl = Data::get_instance().get_logl();
+
 	return 0.;
 }
 
