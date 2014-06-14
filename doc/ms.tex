@@ -58,6 +58,18 @@ hand, let's assume that the prior for run 2 is, conditional on some parameter
 $\alpha$, that each subsequent exponential after the first has scale
 length $\alpha$, which we would like to infer.
 
+i.e. Our interim prior for the $s$ variables given $\alpha$ is:
+\begin{eqnarray}
+s_{11} &\sim& \textnormal{Exponential}(0, 1)\\
+s_{12} | s_{11} &\sim& \textnormal{Exponential}(s_{11}, 1)\\
+s_{13} | s_{11}, s_{12} &\sim& \textnormal{Exponential}(s_{12}, 1)\\
+... &\\
+s_{21} &\sim& \textnormal{Exponential}(0, 1)\\
+s_{22} | s_{21} &\sim& \textnormal{Exponential}(s_{21}, \alpha)\\
+s_{23} | s_{21}, s_{22} &\sim& \textnormal{Exponential}(s_{22}, \alpha)\\
+... &
+\end{eqnarray}
+
 %What's the data? When the $x$-values (or equivalently, the likelihoods) are
 %sorted, we will get an {\it ordering} which looks like this:
 %\begin{eqnarray}
