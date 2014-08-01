@@ -32,13 +32,6 @@ vector< vector<int> > calculate_ranks(const vector< vector<double> >& values)
 	for(size_t i=0; i<pointers.size(); i++)
 		ranks[pointers[i].i][pointers[i].j] = i;
 
-	for(size_t i=0; i<values.size(); i++)
-	{
-		for(size_t j=0; j<values[i].size(); j++)
-			cout<<ranks[i][j]<<' ';
-		cout<<endl;
-	}
-
 	return ranks;
 }
 
