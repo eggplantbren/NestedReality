@@ -28,7 +28,7 @@ for i in xrange(0, N):
 # NEW DATA FORMAT. EACH RUN GOES ON ONE ROW
 data = empty((N, n+1))
 data[:,0] = n
-data[:,1:] = u.T
+data[:,1:] = sqrt(u.T)
 savetxt('data.txt', data)
 
 ### ALTERNATIVE DATA FORMAT
