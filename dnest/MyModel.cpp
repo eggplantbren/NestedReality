@@ -44,7 +44,7 @@ void MyModel::calculate_logp()
 
 void MyModel::fromPrior()
 {
-	alpha = 1.;// 0.1 + randomU();
+	alpha = 0.1 + randomU();
 
 	double a;
 	for(size_t i=0; i<s.size(); i++)
@@ -114,17 +114,14 @@ double MyModel::perturb()
 		return 0.;
 	}
 
+	int which = randInt(3);
 
-	logH += perturb3();
-
-//	int which = randInt(3);
-
-//	if(which == 0)
-//		logH += perturb1();
-//	else if(which == 1)
-//		logH += perturb2();
-//	else
-//		logH += perturb3();
+	if(which == 0)
+		logH += perturb1();
+	else if(which == 1)
+		logH += perturb2();
+	else
+		logH += perturb3();
 
 	return logH;
 }
