@@ -135,7 +135,7 @@ double MyModel::logLikelihood() const
 	for(size_t i=0; i<data.size(); i++)
 	{
 		assert(data[i].size() == ranks[i].size());
-		for(size_t j=0; j<data.size(); j++)
+		for(size_t j=0; j<data[i].size(); j++)
 		{
 			logL += -pow(ranks[i][j] - data[i][j], 2);
 		}
