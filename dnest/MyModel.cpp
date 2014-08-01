@@ -1,6 +1,7 @@
 #include "MyModel.h"
 #include "RandomNumberGenerator.h"
 #include "Utils.h"
+#include "Ranks.h"
 #include "Data.h"
 #include <cmath>
 
@@ -125,9 +126,22 @@ double MyModel::perturb()
 
 double MyModel::logLikelihood() const
 {
-	const vector< vector<double> >& logl = Data::get_instance().get_logl();
+	const vector< vector<int> >& data = Data::get_instance().get_ranks();
+	vector< vector<int> > ranks = calculate_ranks(s);
 
-	return 0.;
+	assert(data.size() == ranks.size());
+
+	long double logL = 0.;
+	for(size_t i=0; i<data.size(); i++)
+	{
+		assert(data[i].size() == ranks[i].size());
+		for(size_t j=0; j<data.size(); j++)
+		{
+			logL += -pow(ranks[i][j] - data[i][j], 2);
+		}
+	}
+
+	return (double)logL;
 }
 
 void MyModel::print(std::ostream& out) const
