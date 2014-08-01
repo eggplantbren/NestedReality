@@ -1,6 +1,8 @@
 #include "Data.h"
+#include "Ranks.h"
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -41,5 +43,7 @@ void Data::load(const char* filename)
 		i++;
 	}
 	fin.close();
+
+	ranks = calculate_ranks(logl);
 }
 

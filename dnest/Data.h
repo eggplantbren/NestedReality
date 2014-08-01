@@ -7,6 +7,7 @@ class Data
 {
 	private:
 		std::vector< std::vector<double> > logl;
+		std::vector< std::vector<int> > ranks;
 
 	public:
 		Data();
