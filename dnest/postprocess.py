@@ -142,7 +142,7 @@ def postprocess(temperature=1., numResampleLogX=1, plot=True, loaded=[], \
 
 				logp_samples[logl_samples_thisLevel[j][2]][z] = np.log(0.5) + logdiffexp(right, left)
 
-		logl = 100*(sample_info[:,1] == 0).astype('float')
+		logl = 1E6*(sample_info[:,1] == 0).astype('float')
 
 		logp_samples[:,z] = logp_samples[:,z] - logsumexp(logp_samples[:,z])
 		logP_samples[:,z] = logp_samples[:,z] + logl
