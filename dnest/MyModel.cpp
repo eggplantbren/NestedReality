@@ -28,6 +28,8 @@ void MyModel::calculate_logp()
 			logp = -1E300;
 			break;
 		}
+		logp += -s[i][0];
+
 		for(size_t j=1; j<s[i].size(); j++)
 		{
 			if(s[i][j] < s[i][j-1])
@@ -42,7 +44,7 @@ void MyModel::calculate_logp()
 
 void MyModel::fromPrior()
 {
-	alpha = 0.1 + randomU();
+	alpha = 1.;// 0.1 + randomU();
 
 	double a;
 	for(size_t i=0; i<s.size(); i++)
@@ -85,7 +87,6 @@ double MyModel::perturb2()
 	return 0.;
 }
 
-
 double MyModel::perturb3()
 {
 	double logH = 0.;
@@ -94,7 +95,7 @@ double MyModel::perturb3()
 	int i = randInt(s.size());
 	int j = randInt(s[i].size());
 
-	logH -= -logp;
+	logH -= logp;
 	s[i][j] += randh();
 	calculate_logp();
 	logH += logp;
@@ -106,20 +107,24 @@ double MyModel::perturb()
 {
 	double logH = 0.;
 
+
 	if(randomU() <= 0.05)
 	{
 		fromPrior();
 		return 0.;
 	}
 
-	int which = randInt(3);
 
-	if(which == 0)
-		logH += perturb1();
-	else if(which == 1)
-		logH += perturb2();
-	else
-		logH += perturb3();
+	logH += perturb3();
+
+//	int which = randInt(3);
+
+//	if(which == 0)
+//		logH += perturb1();
+//	else if(which == 1)
+//		logH += perturb2();
+//	else
+//		logH += perturb3();
 
 	return logH;
 }
